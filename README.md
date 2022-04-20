@@ -1,4 +1,10 @@
-# uni
+# Aries-uni-front
+
+The frontend interface for aries uni demo app. Registration and exchange of verifiable credentials.
+
+Project link: https://uni.vsk.gr
+
+
 
 ## Project setup
 ```
