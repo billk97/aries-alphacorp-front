@@ -4,8 +4,6 @@ The frontend interface for aries uni demo app. Registration and exchange of veri
 
 Project link: https://uni.vsk.gr
 
-
-
 ## Project setup
 ```
 yarn install
