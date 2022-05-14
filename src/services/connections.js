@@ -6,5 +6,11 @@ export default {
             url: '/connections/create-invitation',
             method: 'POST'
         })
+    },
+    getConnections() {
+        return api({
+            url: '/connections',
+            method: 'GET'
+        })
     }
 }

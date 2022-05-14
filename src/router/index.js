@@ -13,6 +13,14 @@ const router = new VueRouter({
             meta: {
                 title: 'Register'
             }
+        },
+        {
+            path: '/did-connections',
+            name: 'Connections',
+            component: () => import('@/components/routes/ConnectionsRoute'),
+            meta: {
+                title: 'Did-Connections'
+            }
         }
     ]
 })

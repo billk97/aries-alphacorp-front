@@ -5,20 +5,13 @@
             <p id="fullName" ref="fullName" style="margin-left: 10px; min-width: 100px; margin-top: 11px;" />
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" />
-<!--        <b-collapse id="nav-collapse" is-nav>-->
-<!--            <b-navbar-nav>-->
-<!--                <b-nav-item href="/">-->
-<!--                    About-->
-<!--                </b-nav-item>-->
-<!--                <b-nav-item href="#">Projects</b-nav-item>-->
-<!--                <b-nav-item-dropdown text="Utils">-->
-<!--                    <b-dropdown-item href="/utils/encrypt">Encrypt/Decrypt</b-dropdown-item>-->
-<!--                    <b-dropdown-item href="/utils/jwt">JWT utils</b-dropdown-item>-->
-<!--                    <b-dropdown-item href="/utils/hash">Hashing utils</b-dropdown-item>-->
-<!--                </b-nav-item-dropdown>-->
-<!--                <b-nav-item href="#">Blog</b-nav-item>-->
-<!--            </b-navbar-nav>-->
-<!--        </b-collapse>-->
+        <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <b-nav-item href="/did-connections">
+                    Did-connections
+                </b-nav-item>
+            </b-navbar-nav>
+        </b-collapse>
     </b-navbar>
 </template>
 
