@@ -12,5 +12,11 @@ export default {
             url: '/connections',
             method: 'GET'
         })
+    },
+    deleteConnection(connectionId) {
+        return api({
+            url: `/connections/${connectionId}`,
+            method: 'DELETE'
+        })
     }
 }

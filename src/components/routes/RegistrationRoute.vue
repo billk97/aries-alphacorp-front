@@ -1,39 +1,36 @@
 <template>
     <div class="login-container">
         <img src="@/assets/logo.png" class="uni-image" alt="">
-        <div>
-            <div class="login-text"> Verifiable credentials login </div>
-            <transition name="fade" mode="out-in">
-                <img key="3" v-if="showImage" src="@/assets/certificate.png" class="certificate-image" alt="">
-                <div key="1" v-if="showRegister">
-                    <qr-code v-if="invitationBase" :text="invitationBase" class="qr-code"></qr-code>
-                    <div class="base-64-box">
-                        {{invitationBase}}
-                    </div>
-                </div>
-            </transition>
-            <div class="custom-button register-button" @click="register()">
-                Register
+        <div class="login-text"> AlphaCorp SSO </div>
+        <div style="display: flex; justify-content: space-evenly">
+        </div>
+        <transition name="fade" mode="out-in">
+            <img key="3" v-if="showImage" src="@/assets/certificate.png" class="certificate-image" alt="">
+            <div key="1" v-if="showRegister">
+                <register-component />
             </div>
-            <div class="custom-button login-button" @click="login()">
-                Login
-            </div>
+        </transition>
+        <div v-if="showButtons" class="custom-button register-button" @click="register()">
+            Register as new Employee
+        </div>
+        <div v-if="showButtons" class="custom-button login-button" @click="login()">
+            Admin Login
         </div>
     </div>
 </template>
 
 <script>
-    import connection from '@/services/connections'
+    import registerComponent from '@/components/RegisterComponent'
     export default {
         name: "RegistrationRoute",
         components: {
+            registerComponent
         },
         data() {
             return {
                 showImage: true,
                 showRegister: false,
-                invitation: null,
-                invitationBase: null,
+                showButtons: true
             }
         },
         methods: {
@@ -41,18 +38,11 @@
             register() {
                 this.showRegister = true
                 this.hideImage()
-                this.getInvitation()
+                this.showButtons = false
             },
             login() {
                 this.hideImage()
-            },
-            getInvitation() {
-                connection.createInvitation().then(response => {
-                    this.invitation = response.data.invitation
-                    console.log(this.invitation)
-                    this.invitationBase = btoa(JSON.stringify(response.data.invitation))
-                    console.log(this.invitationBase)
-                })
+                this.showButtons = false
             }
         }
     }
@@ -99,28 +89,12 @@
         }
 
     }
-    .qr-code {
-        padding: 5px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        border: 3px #DF9342 solid;
-        width: fit-content;
-        margin: 0 auto;
-    }
-    .base-64-box {
-        margin-top: 5%;
-        margin-right: 5%;
-        margin-left: 5%;
-        padding: 5%;
-        overflow-wrap: break-word;
-        background-color: #edf4f6;
-        border: 3px #DF9342 solid;
-        border-radius: 10px;
-    }
+
     .login-text {
         color: #f1f1f1;
         font-weight: bold;
         font-size: x-large;
+        text-shadow: 0 0 2px #24292E;
     }
 
     .uni-image {
@@ -129,10 +103,6 @@
         background-color: #24292E;
         border-radius: 5px;
     }
-    .certificate-image {
-        max-width: 65%;
-    }
-
     .fade-enter-active, .fade-leave-active {
         transition: opacity 2s
     }
@@ -146,7 +116,7 @@
         color: #f1f1f1;
         font-weight: bold;
         font-size: large;
-        max-width: 130px;
+        max-width: 230px;
         border-radius: 10px;
     }
 

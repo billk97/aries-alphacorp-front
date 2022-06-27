@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             i: 0,
-            text: 'University',
+            text: 'AlphaCorp',
             speed: 50
         }
     },
