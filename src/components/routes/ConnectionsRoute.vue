@@ -2,9 +2,11 @@
     <div>
         <div class="settings">
             <h3><b-icon icon="filter-circle-fill" style="margin-left: 10px"/></h3>
+            <!--
             <b-button @click="getConnections()" variant="success">
                 Create Invitation
             </b-button>
+            -->
             <b-button @click="getConnections()" variant="primary">
                 Refresh
             </b-button>
@@ -15,10 +17,20 @@
             </h4>
             <div style="display: flex; justify-content: end; margin-bottom: 2px">
                 <b-button
+                    variant="success"
+                >
+                    Issue Credentials
+                </b-button>
+                <b-button
+                    variant="warning"
+                >
+                    Revoke Credentials
+                </b-button>
+                <b-button
                     variant="danger"
                     @click="deleteConnection(c.connection_id)"
                 >
-                    DELETE
+                    DELETE Connection
                 </b-button>
             </div>
             <b-row>
@@ -34,7 +46,7 @@
                 <b-col cols="10" class="custom-row value">{{c.my_did}}</b-col>
             </b-row>
             <b-row>
-                <b-col cols="2" class="custom-row label">State:</b-col>
+                <b-col cols="2" class="custom-row label" :class="{ 'label-complete': c.rfc23_state === 'completed'}">State:</b-col>
                 <b-col cols="10" class="custom-row value">{{c.rfc23_state}}</b-col>
             </b-row>
             <b-row>
@@ -103,6 +115,9 @@
         border-bottom-left-radius: 10px;
         border-top-left-radius: 10px;
     }
+    .label-complete {
+        background-color: #55B677;
+    }
 
     .custom-row {
         text-align: left;
@@ -110,7 +125,6 @@
         margin-top: 2px;
 
         border-style: solid;
-        border-color: #f6a753;
         border-width: 2px;
     }
     .value {

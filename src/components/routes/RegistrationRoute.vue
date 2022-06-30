@@ -9,6 +9,9 @@
             <div key="1" v-if="showRegister">
                 <register-component />
             </div>
+            <div key="1" v-if="showLogin">
+                <login-component />
+            </div>
         </transition>
         <div v-if="showButtons" class="custom-button register-button" @click="register()">
             Register as new Employee
@@ -21,16 +24,19 @@
 
 <script>
     import registerComponent from '@/components/RegisterComponent'
+    import loginComponent from '@/components/LoginComponent'
     export default {
         name: "RegistrationRoute",
         components: {
-            registerComponent
+            registerComponent,
+            loginComponent
         },
         data() {
             return {
                 showImage: true,
                 showRegister: false,
-                showButtons: true
+                showButtons: true,
+                showLogin: false
             }
         },
         methods: {
@@ -41,6 +47,7 @@
                 this.showButtons = false
             },
             login() {
+                this.showLogin = true
                 this.hideImage()
                 this.showButtons = false
             }
