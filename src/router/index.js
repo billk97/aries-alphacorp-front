@@ -7,7 +7,7 @@ const router = new VueRouter({
     base: '/',
     routes: [
         {
-            path: '/',
+            path: '/register/:uuid?',
             name: 'Registration',
             component: () => import('@/components/routes/RegistrationRoute'),
             meta: {
@@ -20,6 +20,30 @@ const router = new VueRouter({
             component: () => import('@/components/routes/ConnectionsRoute'),
             meta: {
                 title: 'Did-Connections'
+            }
+        },
+        {
+            path: '/employees',
+            name: 'Employees',
+            component: () => import('@/components/routes/EmployeesRoute'),
+            meta: {
+                title: 'Employees'
+            }
+        },
+        {
+            path: '/employee/create',
+            name: 'Create Employee',
+            component: () => import('@/components/routes/CreateEmployeesRoute'),
+            meta: {
+                title: 'Employees-create'
+            }
+        },
+        {
+            path: '/employees/:id',
+            name: 'Create Employee',
+            component: () => import('@/components/routes/CreateEmployeesRoute'),
+            meta: {
+                title: 'Employees-create'
             }
         }
     ]

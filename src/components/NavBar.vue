@@ -1,7 +1,7 @@
 <template>
     <b-navbar toggleable="lg" type="dark" class="nav-bar">
         <img src="@/assets/logo.png" alt="my logo image" style="margin-left: 10px;">
-        <b-navbar-brand href="/">
+        <b-navbar-brand href="/register">
             <p id="fullName" ref="fullName" style="margin-left: 10px; min-width: 100px; margin-top: 11px;" />
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" />
@@ -9,6 +9,9 @@
             <b-navbar-nav>
                 <b-nav-item href="/did-connections">
                     Did-connections
+                </b-nav-item>
+                <b-nav-item href="/employees">
+                    Employees
                 </b-nav-item>
             </b-navbar-nav>
         </b-collapse>

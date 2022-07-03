@@ -2,11 +2,6 @@
     <div>
         <div class="settings">
             <h3><b-icon icon="filter-circle-fill" style="margin-left: 10px"/></h3>
-            <!--
-            <b-button @click="getConnections()" variant="success">
-                Create Invitation
-            </b-button>
-            -->
             <b-button @click="getConnections()" variant="primary">
                 Refresh
             </b-button>

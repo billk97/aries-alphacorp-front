@@ -1,9 +1,9 @@
 import api from '@/utils/api';
 
 export default {
-    createInvitation() {
+    createInvitation(uuid) {
         return api({
-            url: '/connections/create-invitation',
+            url: `/connections/create-invitation/${uuid}`,
             method: 'POST'
         })
     },

@@ -39,13 +39,16 @@
         },
         methods: {
             getInvitation() {
-                connection.createInvitation().then(response => {
+                const uuid = this.getRouterParamUUID()
+                console.log(uuid)
+                connection.createInvitation(uuid).then(response => {
                     this.invitation = response.data.invitation
-                    console.log(this.invitation)
                     this.invitationBase = btoa(JSON.stringify(response.data.invitation))
-                    console.log(this.invitationBase)
                 })
             },
+            getRouterParamUUID() {
+                return this.$route.params.uuid
+            }
         }
     }
 </script>
