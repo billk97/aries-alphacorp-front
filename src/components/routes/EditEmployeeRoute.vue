@@ -99,9 +99,6 @@
                 }
 
                 this.credentials = results
-            },
-            show(c) {
-                c.show = true
             }
         }
     }
