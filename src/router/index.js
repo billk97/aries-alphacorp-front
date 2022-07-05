@@ -39,11 +39,11 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/employees/:id',
-            name: 'Create Employee',
-            component: () => import('@/components/routes/CreateEmployeesRoute'),
+            path: '/employee/:id',
+            name: 'Edit Employee',
+            component: () => import('@/components/routes/EditEmployeeRoute'),
             meta: {
-                title: 'Employees-create'
+                title: 'Employees-edit'
             }
         }
     ]

@@ -26,8 +26,8 @@
                 bordered
                 class="table"
             >
-                <template v-slot:cell(actions)>
-                    <b-button variant="primary">
+                <template v-slot:cell(actions)="data">
+                    <b-button variant="primary" :to="`employee/${data.item.ID}`">
                         Edit
                     </b-button>
                 </template>
