@@ -31,6 +31,14 @@ const router = new VueRouter({
             }
         },
         {
+            path: '/resources',
+            name: 'resources',
+            component: () => import('@/components/routes/ResourcesRoute'),
+            meta: {
+                title: 'resources'
+            }
+        },
+        {
             path: '/employee/create',
             name: 'Create Employee',
             component: () => import('@/components/routes/CreateEmployeesRoute'),

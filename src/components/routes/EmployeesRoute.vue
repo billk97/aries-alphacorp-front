@@ -49,23 +49,7 @@
                     {key: 'didConnectionId', label: "Employee didConnection", thClass: 'bg-dark text-light' },
                     {key: 'actions', thClass: 'bg-dark text-light', tdClass: 'text-center'}
                 ],
-                employees: [
-                    {
-                        id: "1234",
-                        status: "Connected",
-                        didConnection: "1234"
-                    },
-                    {
-                        id: "1235",
-                        status: "Credentials Issued",
-                        didConnection: "1235"
-                    },
-                    {
-                        id: "1236",
-                        status: "Invitation send",
-                        didConnection: "1236"
-                    }
-                ]
+                employees: []
             }
         },
         created() {
@@ -101,7 +85,5 @@
     .header {
         background-color: #24292E;
         color: #f1f1f1;
-        /*bg-dark*/
-        /*text-light*/
     }
 </style>

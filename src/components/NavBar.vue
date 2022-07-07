@@ -13,6 +13,9 @@
                 <b-nav-item href="/employees">
                     Employees
                 </b-nav-item>
+                <b-nav-item href="/resources">
+                    Resources
+                </b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
