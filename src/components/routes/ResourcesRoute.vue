@@ -36,6 +36,10 @@
                 required
                 class="orange-border"
             />
+            <label>PERMISSION</label>
+            <div v-if="newResource.permission" class="orange-border">
+                {{newResource.permission.alias}}
+            </div>
             <b-button variant="success" @click="createNewResource">
                 Submit
             </b-button>
@@ -62,6 +66,18 @@
     import resources from "@/services/resources";
     export default {
         name: "ResourcesRoute",
+        watch: {
+            'newResource.alias' : {
+                handler(newVal, oldVal) {
+                    console.log(newVal)
+                    if(newVal !== oldVal ) {
+                        this.newResource.permission = {
+                            alias: this.formatPermission(newVal)
+                        }
+                    }
+                }
+            }
+        },
         data() {
             return {
                 fields: [
@@ -87,6 +103,19 @@
                 await resources.createResource(this.newResource)
                 await this.fetchResources()
                 this.showForm = false
+            },
+            formatPermission(string) {
+                let formatted = "CAN_ACCESS_"
+                string = this.toUpperCase(string)
+                string = this.toSnakeCase(string)
+                formatted = formatted + string
+                return formatted
+            },
+            toUpperCase(string) {
+                return string.toUpperCase(string)
+            },
+            toSnakeCase(string) {
+                return string.replaceAll(" ", "_")
             }
         }
 
