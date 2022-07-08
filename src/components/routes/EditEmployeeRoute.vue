@@ -4,7 +4,6 @@
             <b-form-group
                 v-if="employee"
                 id="create-employee-input-croup"
-                description="To register an employee please add the employees data here"
             >
                 <h3>Employee details</h3>
                 <div class="orange-border attribute">
@@ -40,41 +39,50 @@
                     <span style="margin-right: 3%"> {{employee.status }} </span>
                 </div>
                 <div v-if="credentials.length > 0">
+                    <div>Credential records</div>
                     <b-form-select
                         v-model="selected"
                         :options="credentials"
                     >
                     </b-form-select>
                 </div>
+                <div style="display:flex; justify-content: flex-end">
+                    <b-button v-if="!showIssueCredentials" variant="success" @click="showIssueCredentials=true" style="margin-top: 5px">
+                        Issue new credentials
+                    </b-button>
+                </div>
             </b-form-group>
-            <img src="@/assets/create-employee.png" style="max-height: 500px" alt="my logo image">
+            <issue-credentials v-if="showIssueCredentials" @show-issue-credentials="hideIssueCredentials" />
         </b-form>
-            <vue-json-pretty
-                v-if="selected"
-                :data="selected"
-                :showLine="true"
-                class="orange-border"
-                style="word-wrap: break-word !important; word-break: break-all; margin: 5%"
-            >
-            </vue-json-pretty>
+        <vue-json-pretty
+            :v-if="selected"
+            :data="selected"
+            :showLine="true"
+            class="orange-border"
+            style="word-wrap: break-word !important; word-break: break-all; margin: 5%"
+        >
+        </vue-json-pretty>
     </div>
 </template>
 
 <script>
     import employees from "@/services/employees";
     import credentials from "@/services/credentials";
+    import issueCredentials from "@/components/IssueCredentials";
     import VueJsonPretty from "vue-json-pretty"
     import 'vue-json-pretty/lib/styles.css';
     export default {
         name: "EditEmployeeRoute",
         components: {
+            issueCredentials,
             VueJsonPretty
         },
         data() {
             return {
                 employee: null,
                 selected: null,
-                credentials: []
+                credentials: [],
+                showIssueCredentials: false,
             }
         },
         created() {
@@ -83,12 +91,15 @@
             })
         },
         methods: {
+            hideIssueCredentials() {
+                this.showIssueCredentials = false
+            },
             async getEmployeeData() {
                 const response = await employees.getEmployeeById(this.$route.params.id)
                 this.employee = response.data
             },
             async getCredentialRecords() {
-                const response = await credentials.getCredentialsRecordsByConnectionId()
+                const response = await credentials.getCredentialsRecordsByConnectionId(this.employee.didConnectionId)
                 let results  = []
                 for(const r of response.data.results) {
                     let reck = {
@@ -97,7 +108,6 @@
                     }
                     results.push(reck)
                 }
-
                 this.credentials = results
             }
         }
@@ -110,11 +120,10 @@
         margin: 1% 15%;
         background-color: #f1f1f1;
         border-radius: 10px;
+        max-width: 1200px;
     }
     .form-container {
-        display: flex;
         margin: 3%;
-        justify-content: space-between;
     }
     .orange-border {
         border-width: 3px;
