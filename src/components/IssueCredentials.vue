@@ -11,8 +11,9 @@
             v-model="rooms"
             :options="availableRooms"
             :multiple="true"
+            label="alias"
+            track-by="alias"
         />
-        {{ rooms }}
         <vue-json-pretty
             :data="credentialOffer"
             :showLine="true"
@@ -20,15 +21,19 @@
             style="word-wrap: break-word !important; word-break: break-all; margin: 5%"
         >
         </vue-json-pretty>
+        <b-button>
+            Send and save user
+        </b-button>
     </div>
 </template>
 
 <script>
-    import VueJsonPretty from "vue-json-pretty"
-    import 'vue-json-pretty/lib/styles.css';
-    import Multiselect from 'vue-multiselect'
+import VueJsonPretty from "vue-json-pretty"
+import 'vue-json-pretty/lib/styles.css';
+import Multiselect from 'vue-multiselect'
+import resources from "@/services/resources";
 
-    export default {
+export default {
         name: "IssueCredentials",
         emits: ['show-issue-credentials'],
         components: {
@@ -39,7 +44,7 @@
             rooms: {
                 handler(newVal, oldVal) {
                     if(newVal !== oldVal ) {
-                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal
+                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal.map(r => r.alias)
                     }
                 }
             }
@@ -75,6 +80,15 @@
                         }
                     }
                 }
+            }
+        },
+        created() {
+            this.fetchAvailableRooms()
+        },
+        methods: {
+            async fetchAvailableRooms() {
+                const temp = await resources.getResources()
+                this.availableRooms = temp.data
             }
         }
     }
