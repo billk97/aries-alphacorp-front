@@ -27,5 +27,14 @@ export default {
             }
         )
     },
+    updateEmployee( employee) {
+        return api(
+            {
+                url: `/employees/${employee.ID}`,
+                method: 'PUT',
+                data: employee
+            }
+        )
+    }
 
 }

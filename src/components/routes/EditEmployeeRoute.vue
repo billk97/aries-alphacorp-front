@@ -4,50 +4,58 @@
             <b-form-group
                 v-if="employee"
                 id="create-employee-input-croup"
-                description="To register an employee please add the employees data here"
             >
                 <h3>Employee details</h3>
                 <div class="orange-border attribute">
-                    <label style="margin-left: 3%">ID: </label>
-                    <span style="margin-right: 3%"> {{employee.ID }} </span>
+                    <label class="form-style" >ID: </label>
+                    <span class="form-style"> {{employee.ID }} </span>
                 </div>
                 <div class="orange-border attribute">
-                    <label style="margin-left: 3%">Firstname: </label>
-                    <span style="margin-right: 3%"> {{employee.firstName }} </span>
+                    <label class="form-style">Firstname: </label>
+                    <span class="form-style"> {{employee.firstName }} </span>
                 </div>
                 <div class="orange-border attribute">
-                    <label style="margin-left: 3%">lastName: </label>
-                    <span style="margin-right: 3%"> {{employee.lastName }} </span>
+                    <label class="form-style">lastName: </label>
+                    <span class="form-style"> {{employee.lastName }} </span>
                 </div>
                 <div class="orange-border attribute">
-                    <label style="margin-left: 3%">jobTitle: </label>
-                    <span style="margin-right: 3%"> {{employee.jobTitle }} </span>
+                    <label class="form-style">jobTitle: </label>
+                    <span class="form-style"> {{employee.jobTitle }} </span>
                 </div>
                 <div class="orange-border attribute">
-                    <label style="margin-left: 3%">Email: </label>
-                    <span style="margin-right: 3%"> {{employee.email }} </span>
+                    <label class="form-style">Email: </label>
+                    <span class="form-style"> {{employee.email }} </span>
                 </div>
                 <div v-if="employee.didConnectionId" class="orange-border attribute">
-                    <label style="margin-left: 3%">connectionId: </label>
-                    <span style="margin-right: 3%"> {{employee.didConnectionId }} </span>
+                    <label class="form-style">connectionId: </label>
+                    <span class="form-style"> {{employee.didConnectionId }} </span>
                 </div>
                 <div v-if="employee.invitation" class="orange-border attribute">
-                    <label style="margin-left: 3%">invitation: </label>
-                    <span style="margin-right: 3%"> {{employee.invitation }} </span>
+                    <label class="form-style">invitation: </label>
+                    <span class="form-style"> {{employee.invitation }} </span>
                 </div>
                 <div v-if="employee.status" class="orange-border attribute">
-                    <label style="margin-left: 3%">status: </label>
-                    <span style="margin-right: 3%"> {{employee.status }} </span>
+                    <label class="form-style">status: </label>
+                    <span class="form-style"> {{employee.status }} </span>
                 </div>
                 <div v-if="credentials.length > 0">
-                    <b-form-select
+                    <div>Credential records</div>
+                    <multiselect
+                        v-if="selected"
                         v-model="selected"
                         :options="credentials"
+                        label="text"
+                        track-by="text"
                     >
-                    </b-form-select>
+                    </multiselect>
+                </div>
+                <div style="display:flex; justify-content: flex-end">
+                    <b-button v-if="!showIssueCredentials" variant="success" @click="showIssueCredentials=true" style="margin-top: 5px">
+                        Issue new credentials
+                    </b-button>
                 </div>
             </b-form-group>
-            <img src="@/assets/create-employee.png" style="max-height: 500px" alt="my logo image">
+            <issue-credentials v-if="showIssueCredentials" @show-issue-credentials="hideIssueCredentials" />
         </b-form>
             <vue-json-pretty
                 v-if="selected"
@@ -63,18 +71,33 @@
 <script>
     import employees from "@/services/employees";
     import credentials from "@/services/credentials";
+    import issueCredentials from "@/components/IssueCredentials";
     import VueJsonPretty from "vue-json-pretty"
     import 'vue-json-pretty/lib/styles.css';
+    import Multiselect from 'vue-multiselect'
+
     export default {
         name: "EditEmployeeRoute",
         components: {
-            VueJsonPretty
+            issueCredentials,
+            VueJsonPretty,
+            Multiselect
+        },
+        watch: {
+            showIssueCredentials: {
+                handler(newVal, oldVal) {
+                    if(newVal === true && newVal !== oldVal) {
+                        this.selected = null
+                    }
+                }
+            }
         },
         data() {
             return {
                 employee: null,
                 selected: null,
-                credentials: []
+                credentials: [],
+                showIssueCredentials: false,
             }
         },
         created() {
@@ -83,13 +106,20 @@
             })
         },
         methods: {
+            hideIssueCredentials() {
+                this.showIssueCredentials = false
+            },
             async getEmployeeData() {
                 const response = await employees.getEmployeeById(this.$route.params.id)
                 this.employee = response.data
+                this.$store.dispatch('updateEmployee', response.data)
             },
             async getCredentialRecords() {
-                const response = await credentials.getCredentialsRecordsByConnectionId()
+                const response = await credentials.getCredentialsRecordsByConnectionId(this.employee.didConnectionId)
                 let results  = []
+                if(results <= 0) {
+                    return
+                }
                 for(const r of response.data.results) {
                     let reck = {
                         text : r.cred_ex_record.cred_ex_id,
@@ -97,7 +127,6 @@
                     }
                     results.push(reck)
                 }
-
                 this.credentials = results
             }
         }
@@ -110,11 +139,10 @@
         margin: 1% 15%;
         background-color: #f1f1f1;
         border-radius: 10px;
+        max-width: 1200px;
     }
     .form-container {
-        display: flex;
         margin: 3%;
-        justify-content: space-between;
     }
     .orange-border {
         border-width: 3px;
@@ -127,6 +155,9 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 5px;
+    }
+    .form-style {
+        margin-left: 3%;
     }
     .submit-button {
         display: flex;
