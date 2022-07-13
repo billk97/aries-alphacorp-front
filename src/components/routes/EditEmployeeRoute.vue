@@ -41,6 +41,7 @@
                 <div v-if="credentials.length > 0">
                     <div>Credential records</div>
                     <multiselect
+                        v-if="selected"
                         v-model="selected"
                         :options="credentials"
                         label="text"
@@ -74,6 +75,7 @@
     import VueJsonPretty from "vue-json-pretty"
     import 'vue-json-pretty/lib/styles.css';
     import Multiselect from 'vue-multiselect'
+
     export default {
         name: "EditEmployeeRoute",
         components: {
@@ -110,11 +112,14 @@
             async getEmployeeData() {
                 const response = await employees.getEmployeeById(this.$route.params.id)
                 this.employee = response.data
-                this.$store.commit('updateEmployee', response.data)
+                this.$store.dispatch('updateEmployee', response.data)
             },
             async getCredentialRecords() {
                 const response = await credentials.getCredentialsRecordsByConnectionId(this.employee.didConnectionId)
                 let results  = []
+                if(results <= 0) {
+                    return
+                }
                 for(const r of response.data.results) {
                     let reck = {
                         text : r.cred_ex_record.cred_ex_id,

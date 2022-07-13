@@ -4,16 +4,19 @@ export default {
     },
     mutations: {
         setEmployee(state, employee) {
-            this.state.employee = employee
+            console.log(employee)
+            state.employee = employee
         }
     },
     actions: {
         updateEmployee({commit}, employee) {
-            console.log(employee)
             commit('setEmployee', employee)
         },
         clearEmployee({commit}) {
             commit('setEmployee', null)
         }
+    },
+    getters: {
+        getEmployee: state => state.employee
     }
 }

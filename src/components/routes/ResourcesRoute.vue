@@ -13,7 +13,7 @@
                 @click="showForm=true"
                 style=" align-self: end;"
             >
-                New Employee
+                New resource
             </b-button>
         </div>
         <b-form-group
