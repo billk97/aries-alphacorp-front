@@ -3,32 +3,41 @@
         <div style="display: flex; justify-content: end">
             <b-button variant="danger" @click="$emit('show-issue-credentials', )"> Hide </b-button>
         </div>
-
         <div>
             Rooms allowed to access
         </div>
         <multiselect
+            v-if="rooms"
             v-model="rooms"
-            :options="availableRooms"
+            :options="availablePermissions"
             :multiple="true"
+            label="alias"
+            track-by="alias"
         />
-        {{ rooms }}
         <vue-json-pretty
+            v-if="credentialOffer"
             :data="credentialOffer"
             :showLine="true"
             class="orange-border"
             style="word-wrap: break-word !important; word-break: break-all; margin: 5%"
-        >
-        </vue-json-pretty>
+        />
+        <b-button variant="primary" @click="addPermissionsToUser">
+            1. Add permissions to employee
+        </b-button>
+        <b-button variant="success" v-if="showSecondButton" @click="sendCredentialOffer">
+            2. Issue Credentials
+        </b-button>
     </div>
 </template>
 
 <script>
-    import VueJsonPretty from "vue-json-pretty"
-    import 'vue-json-pretty/lib/styles.css';
-    import Multiselect from 'vue-multiselect'
+import VueJsonPretty from "vue-json-pretty"
+import 'vue-json-pretty/lib/styles.css';
+import Multiselect from 'vue-multiselect'
+import resources from "@/services/resources";
+import employees from "@/services/employees";
 
-    export default {
+export default {
         name: "IssueCredentials",
         emits: ['show-issue-credentials'],
         components: {
@@ -38,8 +47,12 @@
         watch: {
             rooms: {
                 handler(newVal, oldVal) {
-                    if(newVal !== oldVal ) {
-                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal
+                    if(newVal && (newVal !== oldVal )) {
+                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal.map(r => r.permission.alias)
+                        if(this.employee.permissions) {
+                            this.employee.permissions = []
+                        }
+                        this.employee.permissions = newVal.map( r => { return {ID: r.permission.ID} })
                     }
                 }
             }
@@ -47,9 +60,11 @@
         data() {
             return {
                 rooms: [],
-                availableRooms: ["room-a", "room-b", "room-c"],
+                availablePermissions: [],
+                employee: null,
+                showSecondButton: false,
                 credentialOffer: {
-                    connection_id: "92a93a7b-ddd3-46d3-ab47-135283a3e60a",
+                    connection_id: null,
                     filter: {
                         ld_proof: {
                             credential: {
@@ -58,8 +73,9 @@
                                     "https://www.w3.org/2018/credentials/examples/v1"
                                 ],
                                 type: ["VerifiableCredential", "UniversityDegreeCredential"],
-                                issuer: "did:sov:GHZXFFQdytHVVXywsQaukB",
+                                issuer: "did:sov:GHZXFFQdytHVVXywsQaukB //needs to be fetched dynamicaly",
                                 issuanceDate: "2020-01-01T12:00:00Z",
+                                holder: "did:sov:GHZXFFQdytHVVXywsQaukB // this need to be the subjects",
                                 credentialSubject: {
                                     degree: {
                                         type: "BachelorDegree",
@@ -75,6 +91,27 @@
                         }
                     }
                 }
+            }
+        },
+        created() {
+            this.employee = this.$store.getters.getEmployee
+            this.credentialOffer.connection_id = this.employee.didConnectionId
+            this.rooms = [] // TODO getRoomsEmployee is allowed to enter
+            this.fetchAvailableRooms()
+        },
+        methods: {
+            async fetchAvailableRooms() {
+                const temp = await resources.getResources()
+                this.availablePermissions = temp.data
+            },
+            addPermissionsToUser() {
+                this.$store.dispatch('updateEmployee', this.employee)
+                employees.updateEmployee(this.employee)
+                this.showSecondButton = true
+            },
+            sendCredentialOffer() {
+                // TODO call api to invoke the credential issue step
+                this.$emit('show-issue-credentials', )
             }
         }
     }

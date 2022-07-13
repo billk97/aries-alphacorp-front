@@ -78,6 +78,7 @@
             createEmployee() {
                 this.validateEmployee()
                 employees.createEmployee(this.employee)
+                this.$router.push("/employees")
             }
         }
     }
