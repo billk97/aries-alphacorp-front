@@ -18,6 +18,11 @@ export default {
             }
         )
     },
+    getEmployeeResources(id) {
+        return api({
+            url: `/employees/${id}/resources`
+        })
+    },
     createEmployee(employee) {
         return api(
             {

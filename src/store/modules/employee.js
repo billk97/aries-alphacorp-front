@@ -4,7 +4,6 @@ export default {
     },
     mutations: {
         setEmployee(state, employee) {
-            console.log(employee)
             state.employee = employee
         }
     },

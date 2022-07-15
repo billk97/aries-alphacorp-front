@@ -4,7 +4,7 @@
             <b-button variant="danger" @click="$emit('show-issue-credentials', )"> Hide </b-button>
         </div>
         <div>
-            Rooms allowed to access
+            Employee permissions
         </div>
         <multiselect
             v-if="rooms"
@@ -14,6 +14,7 @@
             label="alias"
             track-by="alias"
         />
+        Employee credential preview
         <vue-json-pretty
             v-if="credentialOffer"
             :data="credentialOffer"
@@ -34,8 +35,8 @@
 import VueJsonPretty from "vue-json-pretty"
 import 'vue-json-pretty/lib/styles.css';
 import Multiselect from 'vue-multiselect'
-import resources from "@/services/resources";
 import employees from "@/services/employees";
+import permissions from "@/services/permissions";
 
 export default {
         name: "IssueCredentials",
@@ -48,11 +49,12 @@ export default {
             rooms: {
                 handler(newVal, oldVal) {
                     if(newVal && (newVal !== oldVal )) {
-                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal.map(r => r.permission.alias)
+                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal.map(r => r.alias)
                         if(this.employee.permissions) {
                             this.employee.permissions = []
                         }
-                        this.employee.permissions = newVal.map( r => { return {ID: r.permission.ID} })
+                        console.log(newVal)
+                        this.employee.permissions = newVal
                     }
                 }
             }
@@ -96,12 +98,12 @@ export default {
         created() {
             this.employee = this.$store.getters.getEmployee
             this.credentialOffer.connection_id = this.employee.didConnectionId
-            this.rooms = [] // TODO getRoomsEmployee is allowed to enter
+            this.rooms = this.employee.permissions
             this.fetchAvailableRooms()
         },
         methods: {
             async fetchAvailableRooms() {
-                const temp = await resources.getResources()
+                const temp = await  permissions.getPermissions()
                 this.availablePermissions = temp.data
             },
             addPermissionsToUser() {
@@ -110,7 +112,6 @@ export default {
                 this.showSecondButton = true
             },
             sendCredentialOffer() {
-                // TODO call api to invoke the credential issue step
                 this.$emit('show-issue-credentials', )
             }
         }
