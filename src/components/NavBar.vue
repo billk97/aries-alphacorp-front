@@ -6,7 +6,7 @@
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" />
         <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav>
+            <b-navbar-nav v-if="isLoggedIn">
                 <b-nav-item href="/did-connections">
                     Did-connections
                 </b-nav-item>
@@ -18,6 +18,9 @@
                 </b-nav-item>
             </b-navbar-nav>
         </b-collapse>
+        <b-button v-if="isLoggedIn" variant="danger" @click="logout" style="margin: 5px;">
+            Logout
+        </b-button>
     </b-navbar>
 </template>
 
@@ -31,6 +34,11 @@ export default {
             speed: 50
         }
     },
+    computed: {
+        isLoggedIn() {
+            return this.$store.getters.isLoggedIn
+        }
+    },
     mounted() {
         this.typeWriter()
     },
@@ -41,6 +49,9 @@ export default {
                 this.i ++
                 setTimeout(this.typeWriter, this.speed)
             }
+        },
+        logout() {
+            this.$store.dispatch('logout')
         }
     }
 }

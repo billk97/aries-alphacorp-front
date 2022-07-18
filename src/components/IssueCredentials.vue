@@ -37,6 +37,7 @@ import 'vue-json-pretty/lib/styles.css';
 import Multiselect from 'vue-multiselect'
 import employees from "@/services/employees";
 import permissions from "@/services/permissions";
+import credentials from "@/services/credentials";
 
 export default {
         name: "IssueCredentials",
@@ -53,7 +54,6 @@ export default {
                         if(this.employee.permissions) {
                             this.employee.permissions = []
                         }
-                        console.log(newVal)
                         this.employee.permissions = newVal
                     }
                 }
@@ -112,6 +112,8 @@ export default {
                 this.showSecondButton = true
             },
             sendCredentialOffer() {
+                credentials.issueCredentials(this.employee.ID)
+                this.$store.dispatch('clearEmployee')
                 this.$emit('show-issue-credentials', )
             }
         }

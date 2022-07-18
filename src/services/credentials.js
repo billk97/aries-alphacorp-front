@@ -6,6 +6,12 @@ export default {
             url: `/issue-credentials/${id}`,
             method: 'GET'
         })
+    },
+    issueCredentials(id) {
+        return api({
+            url: `/issue-credentials/${id}`,
+            method: 'POST'
+        })
     }
 }
 

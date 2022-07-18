@@ -40,7 +40,6 @@
         methods: {
             getInvitation() {
                 const uuid = this.getRouterParamUUID()
-                console.log(uuid)
                 connection.createInvitation(uuid).then(response => {
                     this.invitation = response.data.invitation
                     this.invitationBase = btoa(JSON.stringify(response.data.invitation))

@@ -69,7 +69,6 @@
         watch: {
             'newResource.alias' : {
                 handler(newVal, oldVal) {
-                    console.log(newVal)
                     if(newVal !== oldVal ) {
                         this.newResource.permission = {
                             alias: this.formatPermission(newVal)
