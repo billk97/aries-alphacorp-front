@@ -41,7 +41,6 @@
                 <div v-if="credentials.length > 0">
                     <div>Credential records</div>
                     <multiselect
-                        v-if="selected"
                         v-model="selected"
                         :options="credentials"
                         label="text"
@@ -117,15 +116,15 @@
             async getCredentialRecords() {
                 const response = await credentials.getCredentialsRecordsByConnectionId(this.employee.didConnectionId)
                 let results  = []
-                if(results <= 0) {
+                if(response.data.results <= 0) {
                     return
                 }
                 for(const r of response.data.results) {
-                    let reck = {
+                    let rec = {
                         text : r.cred_ex_record.cred_ex_id,
                         value: r
                     }
-                    results.push(reck)
+                    results.push(rec)
                 }
                 this.credentials = results
             }

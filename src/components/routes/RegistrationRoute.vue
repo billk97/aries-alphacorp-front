@@ -10,7 +10,7 @@
                 <register-component />
             </div>
             <div key="1" v-if="showLogin">
-                <login-component />
+                <login-component @back-to-register="backToStart"/>
             </div>
         </transition>
         <div v-if="showButtons" class="custom-button register-button" @click="register()">
@@ -50,6 +50,12 @@
                 this.showLogin = true
                 this.hideImage()
                 this.showButtons = false
+            },
+            backToStart() {
+                this.showImage = true
+                this.showRegister = false
+                this.showLogin = false
+                this.showButtons = true
             }
         }
     }
@@ -59,6 +65,7 @@
     .login-container {
         display: flex;
         justify-content: center;
+        align-items: center;
         flex-direction: column;
         text-align: center;
         margin-top: 4vh;
@@ -111,10 +118,14 @@
         border-radius: 5px;
     }
     .fade-enter-active, .fade-leave-active {
-        transition: opacity 2s
+        transition: opacity 1.5s
     }
     .fade-enter, .fade-leave-to {
         opacity: 0
+    }
+
+    .certificate-image {
+        max-width: 250px;
     }
 
     .custom-button {
