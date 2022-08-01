@@ -108,8 +108,8 @@ export default {
                 const resp = await credentials.getPublicDid()
                 const alphacorpPublicDid = "did:sov:" + resp.data.did
                 this.credentialOffer.filter.ld_proof.credential.issuer = alphacorpPublicDid
-                this.credentialOffer.filter.ld_proof.credential.holder = this.employee.did
-                this.credentialOffer.filter.ld_proof.credential.credentialSubject.id = this.employee.did
+                this.credentialOffer.filter.ld_proof.credential.holder = "did:sov:" + this.employee.did
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.id = "did:sov:" + this.employee.did
                 this.credentialOffer.filter.ld_proof.credential.credentialSubject.givenName = this.employee.firstName
                 this.credentialOffer.filter.ld_proof.credential.credentialSubject.familyName = this.employee.lastName
                 this.credentialOffer.filter.ld_proof.credential.credentialSubject.jobTitle = this.employee.jobTitle
