@@ -12,16 +12,6 @@
             </h4>
             <div style="display: flex; justify-content: end; margin-bottom: 2px">
                 <b-button
-                    variant="success"
-                >
-                    Issue Credentials
-                </b-button>
-                <b-button
-                    variant="warning"
-                >
-                    Revoke Credentials
-                </b-button>
-                <b-button
                     variant="danger"
                     @click="deleteConnection(c.connection_id)"
                 >

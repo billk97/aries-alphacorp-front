@@ -72,18 +72,18 @@ export default {
                             credential: {
                                 "@context": [
                                     "https://www.w3.org/2018/credentials/v1",
-                                    "https://www.w3.org/2018/credentials/examples/v1"
+                                    "https://api.alphacorp.vsk.gr/contexts/alphacorp-employee/v1"
                                 ],
-                                type: ["VerifiableCredential", "UniversityDegreeCredential"],
-                                issuer: "did:sov:GHZXFFQdytHVVXywsQaukB //needs to be fetched dynamicaly",
+                                type: ["VerifiableCredential", "AlphacorpCredential"],
+                                issuer: null,
                                 issuanceDate: "2020-01-01T12:00:00Z",
-                                holder: "did:sov:GHZXFFQdytHVVXywsQaukB // this need to be the subjects",
+                                holder: null,
                                 credentialSubject: {
-                                    degree: {
-                                        type: "BachelorDegree",
-                                        name: "bill"
-                                    },
-                                    college: "bill College"
+                                    id: null,
+                                    givenName: null,
+                                    familyName: null,
+                                    jobTitle: null,
+                                    email: null
                                 },
                                 rooms: []
                             },
@@ -100,8 +100,21 @@ export default {
             this.credentialOffer.connection_id = this.employee.didConnectionId
             this.rooms = this.employee.permissions
             this.fetchAvailableRooms()
+            this.fillCredentialWithData()
+
         },
         methods: {
+            async fillCredentialWithData(){
+                const resp = await credentials.getPublicDid()
+                const alphacorpPublicDid = "did:sov:" + resp.data.did
+                this.credentialOffer.filter.ld_proof.credential.issuer = alphacorpPublicDid
+                this.credentialOffer.filter.ld_proof.credential.holder = this.employee.did
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.id = this.employee.did
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.givenName = this.employee.firstName
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.familyName = this.employee.lastName
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.jobTitle = this.employee.jobTitle
+                this.credentialOffer.filter.ld_proof.credential.credentialSubject.email = this.employee.email
+            },
             async fetchAvailableRooms() {
                 const temp = await  permissions.getPermissions()
                 this.availablePermissions = temp.data

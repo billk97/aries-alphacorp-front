@@ -12,6 +12,12 @@ export default {
             url: `/issue-credentials/${id}`,
             method: 'POST'
         })
+    },
+    getPublicDid() {
+        return api({
+            url: `/wallet/did/public`,
+            method: 'GET'
+        })
     }
 }
 
