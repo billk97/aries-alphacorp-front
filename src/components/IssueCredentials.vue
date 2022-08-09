@@ -50,7 +50,7 @@ export default {
             rooms: {
                 handler(newVal, oldVal) {
                     if(newVal && (newVal !== oldVal )) {
-                        this.credentialOffer.filter.ld_proof.credential.rooms = newVal.map(r => r.alias)
+                        this.credentialOffer.filter.ld_proof.credential.credentialSubject.RoomCredential = newVal.map(r => r.alias)
                         if(this.employee.permissions) {
                             this.employee.permissions = []
                         }
@@ -72,9 +72,10 @@ export default {
                             credential: {
                                 "@context": [
                                     "https://www.w3.org/2018/credentials/v1",
+                                    "https://api.alphacorp.vsk.gr/contexts/rooms/v1",
                                     "https://api.alphacorp.vsk.gr/contexts/alphacorp-employee/v1"
                                 ],
-                                type: ["VerifiableCredential", "AlphacorpCredential"],
+                                type: ["VerifiableCredential", "AlphacorpCredential", "RoomCredential"],
                                 issuer: null,
                                 issuanceDate: "2020-01-01T12:00:00Z",
                                 holder: null,
@@ -83,12 +84,12 @@ export default {
                                     givenName: null,
                                     familyName: null,
                                     jobTitle: null,
-                                    email: null
-                                },
-                                rooms: []
+                                    email: null,
+                                    RoomCredential: []
+                                }
                             },
                             options: {
-                                "proofType": "Ed25519Signature2018"
+                                "proofType": "BbsBlsSignature2020"
                             }
                         }
                     }
@@ -101,13 +102,16 @@ export default {
             this.rooms = this.employee.permissions
             this.fetchAvailableRooms()
             this.fillCredentialWithData()
-
+        },
+        mounted() {
+            this.fetchAvailableRooms()
         },
         methods: {
             async fillCredentialWithData(){
                 const resp = await credentials.getPublicDid()
                 const alphacorpPublicDid = "did:sov:" + resp.data.did
                 this.credentialOffer.filter.ld_proof.credential.issuer = alphacorpPublicDid
+                this.credentialOffer.filter.ld_proof.credential.issuanceDate = new Date().toISOString()
                 this.credentialOffer.filter.ld_proof.credential.holder = "did:sov:" + this.employee.did
                 this.credentialOffer.filter.ld_proof.credential.credentialSubject.id = "did:sov:" + this.employee.did
                 this.credentialOffer.filter.ld_proof.credential.credentialSubject.givenName = this.employee.firstName
