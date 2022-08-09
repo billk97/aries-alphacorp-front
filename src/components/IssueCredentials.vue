@@ -105,6 +105,7 @@ export default {
         },
         mounted() {
             this.fetchAvailableRooms()
+            this.fillCredentialWithData()
         },
         methods: {
             async fillCredentialWithData(){
